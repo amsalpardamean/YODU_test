@@ -1,0 +1,104 @@
+Query postgres
+
+# create database
+CREATE DATABASE event; 
+
+create table game.tabel_user (
+id serial primary key,
+name varchar (50) unique not null,
+status varchar (10) not null
+);
+
+insert into game.tabel_user (name,status) values
+('Eldhin Rahadian Putra', 'active'),
+('Julian Murphy', 'active'),
+('Muhamad Julian', 'active'),
+('Syauki Fauzan Sumarno', 'active'),
+('I ketut Rio Mahendra Putra', 'active'),
+('Rafli Alvareza Sudrajat', 'inactive');
+
+select * from game.tabel_user;
+
+create table game.tabel_games(
+id serial primary key,
+name char (50) unique not null,
+status varchar (10) not null
+);
+
+insert into game.tabel_games (id, name, status) values
+(1, 'Mobile Legends: Bang Bang', 'active'),
+(2, 'League of Legends: Wild Rift', 'active'),
+(3, 'Arena of Valor ', 'active'),
+(4, 'PUBG Mobile', 'active'),
+(5, 'Free Fire', 'active'),
+(6, 'League of Legends', 'active'),
+(7, 'Crossfire', 'active'),
+(8, 'FIFA Online 4', 'active'),
+(9, 'Fortnite', 'inactive'),
+(10, 'Dota 2', 'inactive'),
+(11, 'Counter-Strike: Global Offensive (CS:GO)', 'inactive'),
+(12, 'Point Blank', 'inactive');
+
+select * from game.tabel_games;
+
+
+create table game.tabel_team(
+id int primary key,
+name char (20) unique not null,
+created_by int not null,
+status varchar (10) not null,
+id_games int not null,
+foreign key (created_by)
+	references game.tabel_user (id),
+foreign key (id_games)
+	references game.tabel_games (id)
+);
+
+
+insert into game.tabel_team (id, name,created_by, status, id_games) values
+(1, 'Alter Ego', 1, 'active', 1),
+(2, 'Aura Fire', 2, 'active', 2),
+(3, 'Bigetron Alpha', 3, 'inactive', 3)
+
+select * from game.tabel_team;
+
+create table game.tabel_tournament(
+id int primary key,
+name char (50) not null,
+status varchar (10) not null,
+id_games int not null,
+max_slot int not null,
+foreign key (id_games)
+	references game.tabel_games (id)
+);
+
+insert into game.tabel_tournament (id, name, status, id_games, max_slot) values
+(1, 'YODU Q1: Mobile Legends: Bang Bang', 'finished', 1, 20),
+(2, 'YODU Q1: PUBG Mobile', 'finished', 4, 20),
+(3, 'YODU Q2: Mobile Legends: Bang Bang', 'ongoing', 1, 20),
+(4, 'YODU Q2: PUBG Mobile', 'ongoing', 4, 20),
+(5, 'YODU Q3: Mobile Legends: Bang Bang', 'regis_open', 1, 20),
+(6, 'YODU Q3: PUBG Mobile', 'regis_open', 4, 20)
+
+select * from game.tabel_tournament
+
+create table game.tabel_team_to_tournament(
+id int primary key,
+id_team int not null,
+id_tournament int not null,
+status_daftar char(15) not null,
+foreign key (id_team)
+	references game.tabel_team (id),
+foreign key (id_tournament)
+	references game.tabel_tournament (id)
+);
+
+insert into game.tabel_team_to_tournament (id, id_team, id_tournament, status_daftar) values
+(1, 1, 1, 'approved'),
+(2, 2, 2, 'pending'),
+(3, 3, 3, 'approved')
+(4, 3, 2, 'approved'),
+(5, 2, 2, 'pending'),
+(6, 1, 2, 'waiting')
+
+select * from game.tabel_team_to_tournament ttm
